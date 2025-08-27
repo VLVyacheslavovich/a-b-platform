@@ -1,0 +1,52 @@
+ab-platform/
+├─ apps/
+│  ├─ api/                  # FastAPI-приложение (только веб-слой)
+│  │  ├─ main.py
+│  │  └─ routers/
+│  │     ├─ assign.py
+│  │     ├─ events.py
+│  │     ├─ alias.py
+│  │     └─ health.py
+│  └─ worker/               # фоновые джобы (агрегации/аналитика)
+│     └─ main.py
+├─ src/ab/                  # общая бизнес-логика (для api и worker)
+│  ├─ settings.py           # Pydantic Settings (.env)
+│  ├─ db/
+│  │  ├─ session.py         # подключение к PG, пул
+│  │  └─ repo.py            # базовый репозиторий
+│  ├─ domain/               # предметка
+│  │  ├─ experiments.py     # CRUD экспериментов/вариантов
+│  │  ├─ assignments.py     # sticky-бакетинг, overrides
+│  │  └─ events.py          # приём/валидация событий
+│  ├─ services/
+│  │  ├─ bucketing.py       # детерминированный хеш → A/B
+│  │  ├─ analytics.py       # агрегаты, CR, SRM и т.п.
+│  │  └─ idempotency.py     # dedup ключи
+│  ├─ schemas/              # Pydantic-модели API
+│  │  ├─ assign.py
+│  │  └─ events.py
+│  ├─ telemetry/
+│  │  ├─ logging.py         # JSON‑логи
+│  │  └─ metrics.py         # Prometheus/OTel
+│  └─ utils/
+│     └─ time.py
+├─ db/
+│  ├─ alembic.ini
+│  ├─ migrations/           # Alembic миграции
+│  └─ seed/                 # стартовые данные (SQL/py)
+├─ infra/
+│  ├─ compose/              # docker-compose.yml
+│  └─ docker/
+│     ├─ api.Dockerfile
+│     ├─ worker.Dockerfile
+│     └─ postgres/
+│        └─ init/           # init‑SQL (если нужно)
+├─ tests/
+│  ├─ test_assign.py
+│  └─ test_events.py
+├─ scripts/                 # утилиты (up/down/migrate)
+├─ docs/                    # краткая архитектура, API‑спеки
+├─ .env.example
+├─ pyproject.toml           # или requirements.txt
+├─ Makefile
+└─ .gitignore

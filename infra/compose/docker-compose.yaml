@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ab
+      POSTGRES_PASSWORD: ab
+      POSTGRES_DB: ab
+    ports: ["5432:5432"]
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/api.Dockerfile # теперь берём из корня
+    environment:
+      DB_DSN: postgresql://ab:ab@db:5432/ab
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
